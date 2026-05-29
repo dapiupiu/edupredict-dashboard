@@ -31,7 +31,7 @@ def load_historical_data():
     if os.path.exists(data_path):
         return pd.read_csv(data_path)
     else:
-        # Fallback generator data acak jika berkas utama belum dipindahkan
+        # Jika file tidak ditemukan, buat dummy data untuk keperluan pengembangan dan demo
         np.random.seed(42)
         n_rows = 6607
         dummy_data = {
@@ -64,26 +64,26 @@ def load_historical_data():
 
 df_raw = load_historical_data()
 
-# Struktur Navigasi Global Sidebar
+# sidebar navigasi utama
 st.sidebar.title("🎓 EduPredict AI")
 st.sidebar.markdown("---")
 page = st.sidebar.radio(
     "Pilih Halaman Navigasi:",
     [
-        "🏠 Overview", 
-        "🔍 Exploratory Data Analysis", 
-        "📊 Business Questions", 
-        "🚨 Profil High Risk", 
-        "🧪 Uji Komparatif (Attendance)", 
-        "📋 Data Explorer",
-        "🔮 Prediksi Risiko Real-Time"  # Menu baru untuk prediksi ML
+        "Overview", 
+        "Exploratory Data Analysis", 
+        "Business Questions", 
+        "Profil High Risk", 
+        "Uji Komparatif (Attendance)", 
+        "Data Explorer",
+        "Prediksi Risiko Real-Time"
     ]
 )
 st.sidebar.markdown("---")
 
-# Mengaktifkan filter global hanya pada halaman analisis data historis umum
-if page in ["🏠 Overview", "🔍 Exploratory Data Analysis", "📊 Business Questions"]:
-    st.sidebar.header("🎛️ Filter Global")
+# filter global untuk halaman Overview, EDA, dan Business Questions agar tetap konsisten dalam analisis
+if page in ["Overview", "Exploratory Data Analysis", "Business Questions"]:
+    st.sidebar.header("Filter Global")
     global_risk = st.sidebar.multiselect(
         "Kategori Risiko:", options=['High', 'Medium', 'Low'], default=['High', 'Medium', 'Low']
     )
@@ -104,18 +104,18 @@ if page in ["🏠 Overview", "🔍 Exploratory Data Analysis", "📊 Business Qu
 else:
     df_filtered = df_raw
 
-# Router Navigasi menuju berkas komponen terkait
-if page == "🏠 Overview":
+# render halaman sesuai pilihan navigasi
+if page == "Overview":
     render_overview(df_filtered, COLOR_MAP)
-elif page == "🔍 Exploratory Data Analysis":
+elif page == "Exploratory Data Analysis":
     render_eda(df_filtered, COLOR_MAP)
-elif page == "📊 Business Questions":
+elif page == "Business Questions":
     render_bq(df_filtered, COLOR_MAP)
-elif page == "🚨 Profil High Risk":
+elif page == "Profil High Risk":
     render_profiling(df_raw, COLOR_MAP)
-elif page == "🧪 Uji Komparatif (Attendance)":
+elif page == "Uji Komparatif (Attendance)":
     render_comparative(df_raw)
-elif page == "📋 Data Explorer":
+elif page == "Data Explorer":
     render_explorer(df_raw)
-elif page == "🔮 Prediksi Risiko Real-Time":
+elif page == "Prediksi Risiko Real-Time":
     render_predict(COLOR_MAP)
