@@ -2,10 +2,10 @@ import streamlit as st
 import plotly.express as px
 
 def render_eda(df, color_map):
-    st.title("🔍 Exploratory Data Analysis")
+    st.title("Exploratory Data Analysis")
     st.markdown("Eksplorasi mendalam distribusi fitur numerik, kategorikal, dan pola hubungan variabel.")
     
-    tab_num, tab_cat, tab_corr, tab_scatter = st.tabs(["🔢 Numerik", "🔠 Kategorikal", "🔗 Korelasi", "🎯 Scatterplot Interaktif"])
+    tab_num, tab_cat, tab_corr, tab_scatter = st.tabs(["Numerik", "Kategorikal", "Korelasi", "Scatterplot Interaktif"])
     
     NUMERICAL_COLS = ['Hours_Studied', 'Attendance', 'Sleep_Hours', 'Previous_Scores', 'Tutoring_Sessions', 'Physical_Activity']
     CATEGORICAL_FEATURES = ['Parental_Involvement', 'Access_to_Resources', 'Motivation_Level', 'Internet_Access', 'Family_Income', 'Teacher_Quality', 'Peer_Influence', 'Parental_Education_Level', 'Gender', 'School_Type', 'Learning_Disabilities', 'Distance_from_Home', 'Extracurricular_Activities']

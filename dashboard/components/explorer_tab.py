@@ -1,16 +1,16 @@
 import streamlit as st
 
 def render_explorer(df_raw):
-    st.title("📋 Data Explorer")
+    st.title("Data Explorer")
     st.markdown("Gunakan halaman ini untuk menyaring, menyortir, mendalami, dan mengunduh baris data spesifik.")
     
-    # Sidebar Filters Lokal Khusus Halaman 6
-    st.sidebar.header("🎛️ Filter Eksplorasi")
+    # sidebar filter
+    st.sidebar.header("Filter Eksplorasi")
     exp_risk = st.sidebar.multiselect("Risk Category:", options=['High', 'Medium', 'Low'], default=['High', 'Medium', 'Low'])
     exp_gender = st.sidebar.selectbox("Gender:", ["All"] + list(df_raw['Gender'].unique()))
     exp_school = st.sidebar.selectbox("School Type:", ["All"] + list(df_raw['School_Type'].unique()))
     
-    # Eksekusi Filter
+    # filter data berdasarkan input
     df_exp = df_raw[df_raw['Risk_Category'].isin(exp_risk)]
     if exp_gender != "All":
         df_exp = df_exp[df_exp['Gender'] == exp_gender]

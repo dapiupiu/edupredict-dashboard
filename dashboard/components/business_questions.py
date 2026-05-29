@@ -3,7 +3,7 @@ import pandas as pd
 import plotly.express as px
 
 def render_bq(df, color_map):
-    st.title("📊 Business Questions Insights")
+    st.title("Business Questions Insights")
     
     bq_select = st.selectbox("Pilih Pertanyaan Bisnis (BQ):", options=[
         "BQ1: Variabel penentu utama performa nilai ujian akhir?",

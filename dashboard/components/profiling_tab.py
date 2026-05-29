@@ -2,15 +2,15 @@ import streamlit as st
 import plotly.express as px
 
 def render_profiling(df_raw, color_map):
-    st.title("🚨 Profiling Khusus Siswa High Risk")
+    st.title("Profiling Khusus Siswa High Risk")
     
-    # Sidebar Filters Lokal Khusus Halaman 4
-    st.sidebar.header("🎛️ Filter Profil High Risk")
+    # sidebar filter untuk fokus pada siswa high risk
+    st.sidebar.header("Filter Profil High Risk")
     hr_gender = st.sidebar.selectbox("Gender:", ["All"] + list(df_raw['Gender'].unique()))
     hr_school = st.sidebar.selectbox("Tipe Sekolah:", ["All"] + list(df_raw['School_Type'].unique()))
     hr_income = st.sidebar.selectbox("Pendapatan Keluarga:", ["All"] + list(df_raw['Family_Income'].unique()))
     
-    # Filter Pemrosesan Khusus High Risk
+    # filter data untuk siswa high risk berdasarkan input filter
     df_hr = df_raw[df_raw['Risk_Category'] == 'High']
     if hr_gender != "All":
         df_hr = df_hr[df_hr['Gender'] == hr_gender]
@@ -30,7 +30,7 @@ def render_profiling(df_raw, color_map):
         st.warning("⚠️ Tidak ada data yang sesuai filter.")
         return
 
-    st.markdown("### 📊 Matriks Distribusi Fitur Khusus Siswa High Risk")
+    st.markdown("### Matriks Distribusi Fitur Khusus Siswa High Risk")
     feats = ['Motivation_Level', 'Parental_Involvement', 'Family_Income', 'Teacher_Quality', 'Internet_Access', 'Peer_Influence']
     cols_grid = st.columns(3) + st.columns(3)
     
@@ -40,11 +40,11 @@ def render_profiling(df_raw, color_map):
             fig = px.bar(counts, x=feat, y='Count', title=f"Distribusi {feat}", color_discrete_sequence=['#e74c3c'])
             st.plotly_chart(fig, use_container_width=True)
             
-    # Dataframe (Data Leakage Aware - Tanpa Exam_Score)
-    st.markdown("### 📋 Daftar Detil Siswa Berisiko Tinggi")
+    # tampilkan tabel detail siswa high risk yang memenuhi filter dengan highlight khusus
+    st.markdown("### Daftar Detail Siswa Berisiko Tinggi")
     display_cols = ['Risk_Category', 'Hours_Studied', 'Attendance', 'Previous_Scores', 'Motivation_Level', 'Parental_Involvement', 'Family_Income', 'Gender', 'School_Type']
     st.dataframe(df_hr[display_cols], use_container_width=True)
     
-    # Download Button
+    # download button untuk data siswa high risk yang sudah difilter
     csv_bytes = df_hr[display_cols].to_csv(index=False).encode('utf-8')
     st.download_button(label="📥 Unduh Data Siswa High Risk (CSV)", data=csv_bytes, file_name="Siswa_High_Risk_Prioritas.csv", mime="text/csv")

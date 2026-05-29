@@ -6,12 +6,12 @@ from scipy import stats
 
 
 def render_comparative(df_raw):
-    st.title("🧪 Uji Komparatif Inferensial — Kehadiran")
+    st.title("Uji Komparatif Inferensial Berbasis Kehadiran")
     st.info(
-        "ℹ️ **Disclaimer Metodologi:** Ini adalah uji komparatif dua sampel independen berbasis data observasional historis, bukan hasil eksperimen uji A/B terkontrol."
+        "ℹ**Disclaimer Metodologi:** Ini adalah uji komparatif dua sampel independen berbasis data observasional historis, bukan hasil eksperimen uji A/B terkontrol."
     )
 
-    # Slider batas threshold kehadiran
+    # slider batas threshold kehadiran
     attend_data = df_raw["Attendance"]
     q25, q50, q75 = (
         int(np.percentile(attend_data, 25)),
@@ -19,7 +19,7 @@ def render_comparative(df_raw):
         int(np.percentile(attend_data, 75)),
     )
 
-    st.markdown("### 🎛️ Pengaturan Batas Threshold Kehadiran")
+    st.markdown("### Pengaturan Batas Threshold Kehadiran")
     threshold = st.slider(
         "Tentukan Batas Kehadiran (%) untuk Pembagian Grup:",
         min_value=q25,
@@ -35,7 +35,7 @@ def render_comparative(df_raw):
         st.error("Ukuran sampel terlalu sedikit untuk pengujian statistik.")
         return
 
-    st.markdown("### 📊 Perbandingan Distribusi Nilai Ujian Akhir (Exam Score)")
+    st.markdown("### Perbandingan Distribusi Nilai Ujian Akhir (Exam Score)")
     combined = pd.concat(
         [
             pd.DataFrame(
@@ -58,16 +58,16 @@ def render_comparative(df_raw):
     )
     st.plotly_chart(fig_kde, use_container_width=True)
 
-    # Kalkulasi Statistika
+    # kalkulasi statistika
     ttest_res = stats.ttest_ind(grup_b, grup_a, equal_var=False)
-    # Access TtestResult fields safely (some static analyzers may not recognize attributes)
+    # access TtestResult
     stat_attr = getattr(ttest_res, "statistic", None)
     p_attr = getattr(ttest_res, "pvalue", None)
     if stat_attr is not None and p_attr is not None:
         t_stat = np.asarray(stat_attr).squeeze().item()
         p_val = np.asarray(p_attr).squeeze().item()
     else:
-        # fallback to tuple/index access
+        # fallback jika atribut tidak ditemukan
         t_stat = np.asarray(ttest_res[0]).squeeze().item()
         p_val = np.asarray(ttest_res[1]).squeeze().item()
     mean_a, mean_b = grup_a.mean(), grup_b.mean()
@@ -81,7 +81,7 @@ def render_comparative(df_raw):
         "Kecil" if abs(cohen_d) < 0.2 else ("Sedang" if abs(cohen_d) < 0.8 else "Besar")
     )
 
-    st.markdown("### 🧮 Hasil Pengujian Hipotesis Statistik")
+    st.markdown("### Hasil Pengujian Hipotesis Statistik")
     c1, c2, c3, c4 = st.columns(4)
     c1.metric("Ukuran Sampel (A / B)", f"{n_a} / {n_b}")
     c2.metric("Rata-rata Nilai (A vs B)", f"{mean_a:.1f} vs {mean_b:.1f}")
